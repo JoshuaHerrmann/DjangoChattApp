@@ -1,0 +1,17 @@
+.page-content {
+    padding: 100px 100px;
+}
+
+.message {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 400px;
+}
+
+.sendInput {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 400px;
+}
