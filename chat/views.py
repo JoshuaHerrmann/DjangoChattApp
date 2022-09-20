@@ -1,4 +1,4 @@
-from http.client import HTTPResponse
+from django.http import HttpResponse
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 from .models import Message, Chat
@@ -6,7 +6,7 @@ from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.core import serializers
-
+import json
 #@login_required(login_url='/login/')
 def index(request):                                                                                 # def heißt define
     if not request.user.is_authenticated:
@@ -15,8 +15,10 @@ def index(request):                                                             
         print('Received data: ' + request.POST['textmessage'])
         myChat = Chat.objects.get(id=1)
         new_message = Message.objects.create(text=request.POST['textmessage'], chat=myChat, author=request.user, receiver=request.user)
-        serialized_obj = serializers.serialize('json', [ new_message ])
-        return JsonResponse(serialized_obj[1:-1], safe=False)
+        user =  {'user':request.user.username}
+        serialized_obj = serializers.serialize('json',  [new_message] )
+        json_string = json.dumps({'data': [serialized_obj[1:-1], user]})
+        return HttpResponse(json_string, content_type='application/json')
     chatMessages = Message.objects.filter(chat__id=1)
     return render(request, 'chat/index.html', {'messages': chatMessages})           # templates/chat/index.html steht da quasi, da die views.py immer in nach templates folder sucht
 
