@@ -1,6 +1,7 @@
 {% extends "base.html" %} {% block content %}
 <div>
     <form action="/login/" method="post">
+        <!-- das form so sended ein HTML request mit method POST und auf den pfad /login/, beim chat benutzten wir einen JS request, wodurch die seite keine neue HTML laden muss -->
         {% csrf_token %}
         <!-- <div>
 

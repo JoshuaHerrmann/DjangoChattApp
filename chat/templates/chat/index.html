@@ -1,23 +1,24 @@
  {% extends "base.html" %} {% block content %} {% if request.user.is_authenticated %}
-<div class="messages">
-    {% for message in messages %}
+<div class="messages" id="messages">
+    {{ date }}{% for message in messages %}
     <!-- django code für nen forschleife, wie *ngFor bei angular -->
     <div class="message">
         <div> {{ message.author }}: <i> {{ message.text }} </i></div><span style="font-size: 10px; color: blue;">[{{ message.created_at }}]</span>
     </div>
     {% endfor %}
 </div>
-
-<form action="/chat/" method="post">
+<form onsubmit="sendMessage(); return false;" method="post">
+    <!-- return false sorgt dafür, dass das prevent default form nicht läuft, also die seite nicht neu lädt. -->
+    <!-- hier benutzten wir kein HTML request sondern ein JS request, wodurch kein neue HTML geladen werden muss. JS arbeitet im hintergrund, HTML wird immer neu geladen -->
     {% csrf_token %}
     <!-- Django code    -->
     <div class="sendInput">
         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-            <input class="mdl-textfield__input" name="textmessage" type="text" id="sample3">
-            <label class="mdl-textfield__label" for="sample3">Text...</label>
+            <input class="mdl-textfield__input" name="textmessage" type="text" id="messageField">
+            <label class="mdl-textfield__label" for="messageField">Your Message...</label>
         </div>
         <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
-        Send
+        Send 
       </button>
     </div>
 </form>
