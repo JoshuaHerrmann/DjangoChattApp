@@ -18,7 +18,7 @@ async function sendMessage() {
         let userData = JSON.parse(json['data'][0])
         deleteMessage.remove();
         messages.innerHTML += `
-        <div class="message" id="deleteMessage">
+        <div class="message">
         <div> ${ json['data'][1]['user']}: <i> ${ messageField.value } </i></div><span style="font-size: 10px; color: blue;">[${ userData['fields']['created_at']}]</span>
     </div>`;
 
