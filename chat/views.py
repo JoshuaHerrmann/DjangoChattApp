@@ -6,11 +6,12 @@ from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.core import serializers
+from django.http import HttpResponseRedirect
 import json
-#@login_required(login_url='/login/')
-def index(request):                                                                                 # def heißt define
-    if not request.user.is_authenticated:
-       return redirect('/logout/')
+@login_required(login_url='/login/')
+def index(request):                                                                               # def heißt define
+    #if not request.user.is_authenticated:
+    #   return redirect('/logout/')
     if request.method == 'POST':
         print('Received data: ' + request.POST['textmessage'])
         myChat = Chat.objects.get(id=1)
@@ -26,20 +27,28 @@ def index(request):                                                             
 def loginView(request):
     if request.user.is_authenticated:
         return redirect('/chat/')
+    if request.method == 'GET':
+        next =  request.GET.get('next', '')
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
+        redirectLink = request.POST['redirectLink']
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('/chat/')
+            return HttpResponseRedirect(redirectLink or '/chat/' )
+           # return redirect('/chat/')
         else:
             return render(request, 'auth/login.html', {'invalidLogin': True})
-    return render(request, 'auth/login.html')
+    return render(request, 'auth/login.html',{'redirectLink':next})
 
 
 def logoutView(request):
     logout(request)
     return render(request, 'auth/logout.html') 
+
+
+def signUp(request):
+    return render(request, 'auth/signup.html')
       
 
