@@ -21,13 +21,10 @@ async function sendMessage() {
         <div class="message">
         <div> ${ json['data'][1]['user']}: <i> ${ messageField.value } </i></div><span style="font-size: 10px; color: blue;">[${ userData['fields']['created_at']}]</span>
     </div>`;
-
-
-
+        messageField.value = '';
     } catch (e) {
         console.error('An error occured!', e)
     }
-
-    messageField.value; // let messageField = document.getElementById('messageField').value ist heutzutage nicht mehr wirklich nötig, da die brower das auch so erkennen! 
-
 }
+
+//messageField.value; === let messageField = document.getElementById('messageField').value ist heutzutage nicht mehr wirklich nötig, da die brower das auch so erkennen!
