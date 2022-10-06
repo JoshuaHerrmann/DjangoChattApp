@@ -1,3 +1,38 @@
 {% extends "base.html" %}{% block content %}
 <h2 style="color: red;">Sign up</h2>
+<form action="/signup/" method="post">
+    {% csrf_token %}
+    <div class="names">
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" name="firstname" type="text" id="sample3" autocomplete="off">
+            <label class="mdl-textfield__label" for="sample3">Firstname</label>
+        </div>
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" name="lastname" type="text" id="sample3" autocomplete="off">
+            <label class="mdl-textfield__label" for="sample3">Lastname</label>
+        </div>
+    </div>
+    <div class="email">
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" name="email" type="text" id="sample3" autocomplete="off">
+            <label class="mdl-textfield__label" for="sample3">Your Email</label>
+        </div>
+    </div>
+    <div class="passwords">
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" name="password1" type="text" id="sample3" autocomplete="off">
+            <label class="mdl-textfield__label" for="sample3">Password</label>
+        </div>
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" name="password2" type="text" id="sample3" autocomplete="off">
+            <label class="mdl-textfield__label" for="sample3">Confirm password</label>
+        </div>
+        {% if password_incorrect %}
+        <p style="color: red;">Password is not the same! </p>
+        {% endif %}
+    </div>
+    <button class="mdl-button mdl-js-button mdl-button--raised" type="submit">
+        Sign Up
+      </button>
+</form>
 {% endblock %}

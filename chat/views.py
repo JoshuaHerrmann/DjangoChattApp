@@ -1,3 +1,4 @@
+from importlib import invalidate_caches
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
@@ -7,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.core import serializers
 from django.http import HttpResponseRedirect
+from django.contrib.auth.models import User
 import json
 @login_required(login_url='/login/')
 def index(request):                                                                               # def heißt define
@@ -49,6 +51,26 @@ def logoutView(request):
 
 
 def signUp(request):
+    if request.user.is_authenticated:
+        return redirect('/chat/')
+    if request.method == 'POST':
+        if request.POST['password1'] == request.POST['password2']:
+            firstname = request.POST['firstname']
+            lastname = request.POST['lastname']
+            email = request.POST['email']
+            password = request.POST['password1']
+            username = firstname + lastname
+            user = User.objects.create_user(firstname, email, password)
+            user.first_name = firstname
+            user.last_name = lastname
+            user.username = username
+            user.save()
+            print('Succesfully created new User!', user)
+            userLogin = authenticate(request, username=username, password=password)
+            login(request, userLogin)
+            return redirect('/chat/')
+        else:
+            return render(request, 'auth/signup.html', {'password_incorrect': True})
     return render(request, 'auth/signup.html')
       
 
