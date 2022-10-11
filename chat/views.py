@@ -26,7 +26,7 @@ def index(request):                                                             
     return render(request, 'chat/index.html', {'messages': chatMessages})           # templates/chat/index.html steht da quasi, da die views.py immer in nach templates folder sucht
 
 
-def loginView(request):
+def login_view(request): 
     if request.user.is_authenticated:
         return redirect('/chat/')
     if request.method == 'GET':
@@ -45,12 +45,12 @@ def loginView(request):
     return render(request, 'auth/login.html',{'redirectLink':next})
 
 
-def logoutView(request):
+def logout_view(request):
     logout(request)
     return render(request, 'auth/logout.html') 
 
 
-def signUp(request):
+def sign_up_view(request):
     if request.user.is_authenticated:
         return redirect('/chat/')
     if request.method == 'POST':
