@@ -11,10 +11,10 @@ from .utils import get_userdata_as_json, create_user_and_assing_data, set_variab
 
 @login_required(login_url='/login/')
 def index(request):
-    '''
+    """
     The main view to render the chat html. Inside the chat each message from model.chat(id) is shown. 
     By sending a new message, a JS response is send to /chat/ and is rendering the new message in the frontend
-    '''                                                                               # def heißt define
+    """                                                                              # def heißt define
     #if not request.user.is_authenticated:
     #   return redirect('/logout/')
     if request.method == 'POST':
