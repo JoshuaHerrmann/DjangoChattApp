@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from chat.views import index, login_view, logout_view, sign_up_view
+from chat.views import index, login_view, logout_view, signup_view
 from django.views.generic.base import RedirectView
 
 
@@ -25,6 +25,6 @@ urlpatterns = [
     path('chat/', index),
     path('login/', login_view),
     path('logout/', logout_view),
-    path('signup/', sign_up_view),
+    path('signup/', signup_view),
     path('', RedirectView.as_view(url='chat/'))
 ]

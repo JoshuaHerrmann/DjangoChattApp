@@ -4,10 +4,7 @@ async function sendMessage() {
     fd.append('textmessage', messageField.value);
     fd.append('csrfmiddlewaretoken', csrf_token[0].value);
     try {
-        messages.innerHTML += `
-        <div class="message" id="deleteMessage">
-        <div style=" color: grey;"> You : <i> ${ messageField.value } </i></div><span style="font-size: 10px; color: grey;"></span>
-    </div>`;
+        templateBevorLoaded();
         let response = await fetch('/chat/', {
             body: fd,
             method: 'POST',
@@ -18,14 +15,32 @@ async function sendMessage() {
         let userData = JSON.parse(json['data'][0])
         let newDate = createTimeStemp(userData['fields']['created_at'])
         deleteMessage.remove();
-        messages.innerHTML += `
-        <div class="message">
-        <div> ${ json['data'][1]['user'] }: <i> ${ messageField.value } </i></div><span style="font-size: 10px; color: blue;">[${ newDate }]</span>
-    </div>`;
         messageField.value = '';
+        templateAfterLoaded(newDate);
     } catch (e) {
         console.error('An error occured!', e)
     }
+}
+
+
+
+//Utility functions
+
+
+function templateBevorLoaded() {
+    messages.innerHTML += `
+        <div class="message" id="deleteMessage">
+        <div style=" color: grey;"> You : <i> ${ messageField.value } </i></div><span style="font-size: 10px; color: grey;"></span>
+        </div>`;
+}
+
+
+function templateAfterLoaded(newDate) {
+
+    messages.innerHTML += `
+        <div class="message">
+        <div> ${ json['data'][1]['user'] }: <i> ${ messageField.value } </i></div><span style="font-size: 10px; color: blue;">[${ newDate }]</span>
+        </div>`;
 }
 
 
@@ -36,4 +51,3 @@ function createTimeStemp(date) {
     let month = newDate.toLocaleString('en-US', { month: 'short' });
     return `${ month }, ` + `${ day }, ` + `${ year }`
 }
-//messageField.value; === let messageField = document.getElementById('messageField').value ist heutzutage nicht mehr wirklich nötig, da die brower das auch so erkennen!
