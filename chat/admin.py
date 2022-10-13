@@ -7,6 +7,11 @@ class MessageAdmin(admin.ModelAdmin): #das naming für die display classen ist e
     list_display = ('author', 'text', 'created_at', 'receiver') # das was in der models liste steht
     search_fields = ('text',)# suchfunktion sucht in dem jeweiligen part
 
+class ChatAdmin(admin.ModelAdmin):
+    list_display = ('chat_name',)
+
+
+    
 # Register your models here.
 admin.site.register(Message, MessageAdmin)
-admin.site.register(Chat)
+admin.site.register(Chat, ChatAdmin)

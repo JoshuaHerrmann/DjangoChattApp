@@ -11,6 +11,7 @@
     <!-- return false sorgt dafür, dass das prevent default form nicht läuft, also die seite nicht neu lädt. -->
     <!-- hier benutzten wir kein HTML request sondern ein JS request, wodurch kein neue HTML geladen werden muss. JS arbeitet im hintergrund, HTML wird immer neu geladen -->
     {% csrf_token %}
+    <input type="hidden" id="channelId" value="{{channelId}}">
     <!-- Django code    -->
     <div class="sendInput">
         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">

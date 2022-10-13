@@ -1,11 +1,12 @@
 async function sendMessage() {
     let fd = new FormData(); //fd = formdata, erstellt neues formular anstatt HTML <form>
     let csrf_token = document.getElementsByName('csrfmiddlewaretoken')
+    let chId = channelId.value
     fd.append('textmessage', messageField.value);
     fd.append('csrfmiddlewaretoken', csrf_token[0].value);
     try {
-        templateBevorLoaded();
-        let response = await fetch('/chat/', {
+        templateBeforLoaded();
+        let response = await fetch(`/chat/${chId}/`, {
             body: fd,
             method: 'POST',
         })
@@ -15,8 +16,8 @@ async function sendMessage() {
         let userData = JSON.parse(json['data'][0])
         let newDate = createTimeStemp(userData['fields']['created_at'])
         deleteMessage.remove();
+        templateAfterLoaded(newDate, json);
         messageField.value = '';
-        templateAfterLoaded(newDate);
     } catch (e) {
         console.error('An error occured!', e)
     }
@@ -27,7 +28,7 @@ async function sendMessage() {
 //Utility functions
 
 
-function templateBevorLoaded() {
+function templateBeforLoaded() {
     messages.innerHTML += `
         <div class="message" id="deleteMessage">
         <div style=" color: grey;"> You : <i> ${ messageField.value } </i></div><span style="font-size: 10px; color: grey;"></span>
@@ -35,8 +36,7 @@ function templateBevorLoaded() {
 }
 
 
-function templateAfterLoaded(newDate) {
-
+function templateAfterLoaded(newDate, json) {
     messages.innerHTML += `
         <div class="message">
         <div> ${ json['data'][1]['user'] }: <i> ${ messageField.value } </i></div><span style="font-size: 10px; color: blue;">[${ newDate }]</span>

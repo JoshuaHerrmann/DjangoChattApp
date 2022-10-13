@@ -17,6 +17,7 @@ def index(request):
     """                                                                              # def heißt define
     #if not request.user.is_authenticated:
     #   return redirect('/logout/')
+    print('KeinIndex')
     if request.method == 'POST':
         print('Received data: ' + request.POST['textmessage'])
         myChat = Chat.objects.get(id=1)
@@ -25,10 +26,28 @@ def index(request):
     chatMessages = Message.objects.filter(chat__id=1)
     return render(request, 'chat/index.html', {'messages': chatMessages})           # templates/chat/index.html steht da quasi, da die views.py immer in nach templates folder sucht
 
+@login_required(login_url='/login/')
+def index_id(request, id):
+    print('IndexID')
+    if request.method == 'POST':
+        print('Received data: ' + request.POST['textmessage'])
+        try:
+            myChat = Chat.objects.get(id=id)
+            print(id)
+        except:
+            myChat = Chat.objects.get(id=1)
+            print('failure')
+        new_message = Message.objects.create(text=request.POST['textmessage'], chat=myChat, author=request.user, receiver=request.user)
+        return get_userdata_as_json(request, new_message)
+    chatMessages = Message.objects.filter(chat__id=id or 1)
+    return render(request, 'chat/index.html', {'messages': chatMessages,'channelId':id})           # templates/chat/index.html steht da quasi, da die views.py immer in nach templates folder sucht
+
 
 def login_view(request): 
+    if id:
+        print('id route', id)
     if request.user.is_authenticated:
-        return redirect('/chat/')
+        return redirect('/chat/1/')
     if request.method == 'GET':
         next =  request.GET.get('next', '')
     if request.method == 'POST':
@@ -38,7 +57,7 @@ def login_view(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return HttpResponseRedirect(redirectLink or '/chat/' )
+            return HttpResponseRedirect(redirectLink or '/chat/1/' )
            #return redirect('/chat/')
         else:
             return render(request, 'auth/login.html', {'invalidLogin': True})
@@ -52,7 +71,7 @@ def logout_view(request):
 
 def signup_view(request):
     if request.user.is_authenticated:
-        return redirect('/chat/')
+        return redirect('/chat/1/')
     if request.method == 'POST':
         if request.POST['password1'] == request.POST['password2']:
             firstname, lastname, email, password = set_variables_for_signup(request)
@@ -61,7 +80,7 @@ def signup_view(request):
             print('Succesfully created new User!',user)
             userLogin = authenticate(request, username=username, password=password)
             login(request, userLogin)
-            return redirect('/chat/')
+            return redirect('/chat/1/')
         else:
             return render(request, 'auth/signup.html', {'password_incorrect': True})
     return render(request, 'auth/signup.html')
