@@ -31,22 +31,26 @@
                 <!-- Navigation. We hide it in small screens. -->
                 <nav class="mdl-navigation mdl-layout--large-screen-only">
                     <a class="mdl-navigation__link" href="/admin/">Admin Section</a>
+                    <!-- <a class="mdl-navigation__link" href="#">Link</a>
                     <a class="mdl-navigation__link" href="#">Link</a>
-                    <a class="mdl-navigation__link" href="#">Link</a>
-                    <a class="mdl-navigation__link" href="#">Link</a>
+                    <a class="mdl-navigation__link" href="#">Link</a> -->
                 </nav>
             </div>
         </header>
         <div class="mdl-layout__drawer">
-            <span class="mdl-layout-title">Chatroom</span>
+            {% if request.user.is_authenticated %}
+            <span class="mdl-layout-title">Chatrooms</span>
             <nav class="mdl-navigation">
-                <a class="mdl-navigation__link" href="">Link</a>
-                <a class="mdl-navigation__link" href="">Link</a>
-                <a class="mdl-navigation__link" href="">Link</a>
-                <a class="mdl-navigation__link" href="">Link</a>
+                {% for chat in chats%}
+                <a class="mdl-navigation__link" href="/chat/{{chat.id}}/">{{ chat.chat_name}}</a> {% endfor %}
             </nav>
+            {% else %}
+            <span class="mdl-layout-title">Chatrooms</span>
+            <p style="color: red; padding: 0 25px;text-align:center;">Please log in to see all chatrooms!</p>
+            {% endif %}
         </div>
         <main class="mdl-layout__content">
+
             <div class="page-content">
                 {% block content %} {% endblock %}
             </div>

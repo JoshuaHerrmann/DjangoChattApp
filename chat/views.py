@@ -20,27 +20,26 @@ def index(request):
     print('KeinIndex')
     if request.method == 'POST':
         print('Received data: ' + request.POST['textmessage'])
-        myChat = Chat.objects.get(id=1)
-        new_message = Message.objects.create(text=request.POST['textmessage'], chat=myChat, author=request.user, receiver=request.user)
+        my_chat = Chat.objects.get(id=1)
+        new_message = Message.objects.create(text=request.POST['textmessage'], chat=my_chat, author=request.user, receiver=request.user)
         return get_userdata_as_json(request, new_message)
     chatMessages = Message.objects.filter(chat__id=1)
     return render(request, 'chat/index.html', {'messages': chatMessages})           # templates/chat/index.html steht da quasi, da die views.py immer in nach templates folder sucht
 
 @login_required(login_url='/login/')
 def index_id(request, id):
-    print('IndexID')
     if request.method == 'POST':
         print('Received data: ' + request.POST['textmessage'])
         try:
-            myChat = Chat.objects.get(id=id)
-            print(id)
+            my_chat = Chat.objects.get(id=id)
         except:
-            myChat = Chat.objects.get(id=1)
+            my_chat = Chat.objects.get(id=1)
             print('failure')
-        new_message = Message.objects.create(text=request.POST['textmessage'], chat=myChat, author=request.user, receiver=request.user)
+        new_message = Message.objects.create(text=request.POST['textmessage'], chat=my_chat, author=request.user, receiver=request.user)
         return get_userdata_as_json(request, new_message)
-    chatMessages = Message.objects.filter(chat__id=id or 1)
-    return render(request, 'chat/index.html', {'messages': chatMessages,'channelId':id})           # templates/chat/index.html steht da quasi, da die views.py immer in nach templates folder sucht
+    chat_messages = Message.objects.filter(chat__id=id or 1)
+    all_chats = Chat.objects.all()
+    return render(request, 'chat/index.html', {'messages': chat_messages,'channelId':id, 'chats':all_chats})           # templates/chat/index.html steht da quasi, da die views.py immer in nach templates folder sucht
 
 
 def login_view(request): 
